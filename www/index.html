@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Chat App</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="main">
+        <div class="title">
+          <h2>
+            <strong>Chat App</strong> <br />
+            <small style="font-weight: lighter; font-size: 15px"
+              >with file sharing facility</small
+            >
+          </h2>
+        </div>
+        <button id="btnshow">
+          <hr />
+          <hr />
+          <hr />
+        </button>
+        <div class="mainchat">
+          <div id="sidebar" class="">
+            <div id="rooms">
+              <p>Chat Rooms <span id="create-room">+</span></p>
+              <ul id="roomlist"></ul>
+            </div>
+            <div id="users">
+              <p>Active Users</p>
+              <ul id="userlist"></ul>
+            </div>
+          </div>
+
+          <div id="chat-area" class="">
+            <div class="chat-box">
+              <div id="chat-display" class="">
+                <div id="msg"></div>
+                <div id="images"></div>
+              </div>
+            </div>
+
+            <div class="chat-sender">
+              <input
+                type="text"
+                id="message"
+                placeholder="Write a message..."
+              />
+              <button class="" id="send">
+                <img src="img/send.png" width="32px" />
+              </button>
+              <label id="btnImageFile">
+                <img src="img/attachment.png" width="28px" />
+                <input type="file" style="display: none" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#btnshow").click(function () {
+          $("#sidebar").slideToggle();
+        });
+      });
+    </script>
+  </body>
+</html>
