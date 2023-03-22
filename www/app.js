@@ -1,30 +1,27 @@
-var socket = io.connect("http://localhost:5000");
 
+var socket = io.connect("http://localhost:5000");
+var myName = '';
 var userlist = document.getElementById("userlist");
 var roomlist = document.getElementById("roomlist");
 var message = document.getElementById("message");
-var msgErr = document.getElementById("chaterror");
 var sendMessageBtn = document.getElementById("send");
-var sendFileBtn = document.getElementById("sendFile");
 var createRoomBtn = document.getElementById("create-room");
 var messages = document.getElementById("msg");
 var chatDisplay = document.getElementById("chat-display");
-
-var typingIndicator = document.getElementById("typingIndicator");
-
-var currentRoom = "global";
+var currentRoom = "General";
 
 // Send message on button click
 sendMessageBtn.addEventListener("click", function () {
     if (message.value == "") {
-        //alert("Message box can't be blank!");
-        msgErr.innerHTML = "Please write message before send it.";
+        return;
     } else {
+        console.log("not blank");
+        console.log(message.value);
         socket.emit("sendMessage", message.value);
         message.value = "";
         var sendSound = new Audio("./sound/1.wav");
         sendSound.play();
-        msgErr.innerHTML = "";
+        socket.emit("rSound", { sound: "./sound/2.mp3" });
     }
 });
 
@@ -37,7 +34,11 @@ message.addEventListener("keyup", function (event) {
 
 //send file
 socket.on('addimage', function (user, myImage, myFile) {
-    $('#msg').append('<p><b>' + user + ': </b>' + '<img width="200" height="200" style="border-radius:10px" src="' + myImage + '" /><br><small>' + moment().format('h:mm a') + '</small></p>');
+    if (user == myName) {
+        $('#msg').append('<p class="self"><b>' + user + ': </b>' + '<img width="200" height="200" style="border-radius:10px" src="' + myImage + '" /><br><small>' + moment().format('h:mm a') + '</small></p>');
+    }else{
+        $('#msg').append('<p><b>' + user + ': </b>' + '<img width="200" height="200" style="border-radius:10px" src="' + myImage + '" /><br><small>' + moment().format('h:mm a') + '</small></p>');
+    }
     chatDisplay.scrollTop = chatDisplay.scrollHeight;
 })
 $(function () {
@@ -58,25 +59,27 @@ createRoomBtn.addEventListener("click", function () {
     socket.emit("createRoom", prompt("Enter new room: "));
 });
 
-
 socket.on("connect", function () {
     var uName = prompt("Enter name: ");
     socket.emit("createUser", uName);
     document.title = "User - " + uName;
+    myName = uName;
 });
-
 
 socket.on("updateChat", function (username, data) {
     if (username == "INFO") {
         messages.innerHTML +=
             "<p class='alert alert-warning w-100'>" + data + "</p>";
+    }
+    else if (username == myName) {
+        messages.innerHTML +=
+            "<p class='self'><span><strong>" + username + ": </strong></span>" + data + "<br><small>" + moment().format('h:mm a') + "</small></p>";
     } else {
         messages.innerHTML +=
             "<p><span><strong>" + username + ": </strong></span>" + data + "<br><small>" + moment().format('h:mm a') + "</small></p>";
     }
     chatDisplay.scrollTop = chatDisplay.scrollHeight;
 });
-
 
 socket.on("updateUsers", function (usernames) {
     userlist.innerHTML = "";
@@ -96,7 +99,7 @@ socket.on("updateRooms", function (rooms, newRoom) {
             rooms[index] +
             '" onclick="changeRoom(\'' +
             rooms[index] +
-            "')\"># " +
+            "')\">" +
             rooms[index] +
             "</li>";
     }
@@ -109,7 +112,6 @@ socket.on("updateRooms", function (rooms, newRoom) {
 
 });
 
-
 function changeRoom(room) {
 
     if (room != currentRoom) {
@@ -120,26 +122,7 @@ function changeRoom(room) {
     }
 }
 
-//typing indicator
-message.addEventListener("keypress", () => {
-    socket.emit("typing", { user: "Someone", message: "is typing..." });
-});
-socket.on("notifyTyping", data => {
-    typingIndicator.innerText = data.user + "  " + data.message;
-    console.log(data.user + data.message);
-});
-//stop typing
-message.addEventListener("keyup", () => {
-    socket.emit("stopTyping", "");
-});
-socket.on("notifyStopTyping", () => {
-    typingIndicator.innerText = "";
-});
-
 //broadcast tone
-sendMessageBtn.addEventListener("click", function () {
-    socket.emit("rSound", { sound: "./sound/2.mp3" });
-});
 socket.on("notifySound", data => {
     var receiveSound = new Audio(data.sound);
     receiveSound.play();

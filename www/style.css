@@ -7,6 +7,23 @@ body {
     font-family: sans-serif;
 }
 
+h1 {
+    padding: 5px;
+    margin-top: 10px;
+}
+
+h2 {
+    color: rgb(53, 48, 48);
+}
+
+h2 span {
+    color: cornflowerblue;
+}
+
+small {
+    font-size: 70%;
+}
+
 .container{
     display: flex;
     justify-content: center;
@@ -20,57 +37,95 @@ body {
     height: 500px;
     overflow: hidden;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 .mainchat{
     display: flex;
+    background-color: #17212B;
+    flex: 1;
 }
 .mainchat #sidebar{
     flex: 1;
-    background-color: #1E2126;
     padding: 5px;
 }
 .mainchat #chat-area{
     flex: 3;
     position: relative;
-    background-color: #12171D;
+    background-color: #0E1621;
 }
-#chat-area .chat-box{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 90%;
-}
-#chat-area .chat-sender{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.mainchat #users{
+    flex:1;
 }
 
-
-h1 {
+button#btnshow {
+    width: 35px;
+    padding: 0 5px;
+    height: auto;
+}
+#rooms > p{
+    text-align: center;
+    padding: 10px;
+}
+#users p{
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+}
+#userlist{
+    position:relative;
+    margin-left: 5px;
+}
+#userlist li{
+    display: flex;
     padding: 5px;
-    margin-top: 10px;
+    position: relative;
+    background-color: #0f1820;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    color: #f0f4ff;
+    font-size: .9rem;
 }
-
-h2 {
-    color: rgb(53, 48, 48);
-}
-
-    h2 span {
-        color: cornflowerblue;
+#userlist li::before{
+       content: '';
+       display: inline-block;
+       width: 8px;
+       height: 8px;
+       -moz-border-radius: 50%;
+       -webkit-border-radius: 50%;
+       border-radius: 7.5px;
+       background-color: lime;
+       margin-right: 10px;
+       align-self: center;
+    }
+#userlist li:hover{
+       background-color: #141518;
     }
 
-small {
-    font-size: 70%;
+#userlist li:last-child::after{
+    content: '';
+    display: none;
 }
-
+#roomlist li{
+    background-color: #0f1820;
+    padding: 10px 5px;
+    border-radius: 5px;
+    margin-bottom: 2px;
+    outline: 0;
+    font-size: .9rem;
+}
+#roomlist li::before {
+    content: '🔸';
+    display: inline-block;
+    margin-right: 10px;
+}
 
 .title{
-    background: #283B59;
+    height: auto;
 }
 .title h2 {
+    background: #1F2936;
     margin: 0;
     padding: 10px;
     text-align: center;
@@ -84,8 +139,19 @@ small {
     color: #fff;
 
 }
-.chat-sender{
-    background-color: #1E2126;
+#chat-area .chat-box{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 90%;
+}
+#chat-area .chat-sender{
+    position: absolute;
+    background-color: transparent;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 5px;
     display: flex;
     justify-content: center;
@@ -129,12 +195,22 @@ small {
     clear: both;
     float: left;
     font-size: 0.9rem;
+    background-color: #182533;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    padding: 10px;
 }
 
-    #msg p span {
-        color: #039be5;
-        color: cornflowerblue;
-    }
+#msg p.self {
+    float: right;
+}
+#msg p span {
+    color: #039be5;
+    color: cornflowerblue;
+}
+#msg img{
+    object-fit: cover;
+}
 
 div#msg {
     overflow: hidden;
@@ -157,7 +233,7 @@ ul {
     list-style: none;
     padding: 0;
     margin-left: 10px;
-    height: 170px;
+    height: 375px;
     overflow: scroll;
 }
 
@@ -204,11 +280,6 @@ ul {
     background-color: #fff3cd;
     border-color: #ffeeba;
     padding: 10px;
-}
-
-button#btnshow {
-    width: 35px;
-    padding: 0 5px;
 }
 
 @media only screen and (max-width: 578px) {

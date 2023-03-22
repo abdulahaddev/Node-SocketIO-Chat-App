@@ -12,7 +12,7 @@ var io = socket(server);
 
 // Global variables to hold all usernames and rooms created
 var usernames = {};
-var rooms = ["global", "r51", "c#"];
+var rooms = ["General", "Friend Zone", "DSA"];
 
 io.on("connection", function(socket) {
 
@@ -21,21 +21,26 @@ io.on("connection", function(socket) {
   socket.on("createUser", function(username) {
     socket.username = username;
     usernames[username] = username;
-    socket.currentRoom = "global";
-    socket.join("global");
-    socket.emit("updateChat", "INFO", "<b>System:</b><br/>You have joined <b>global</b> room");
+    socket.currentRoom = "General";
+    socket.join("General");
+    socket.emit("updateChat", "INFO", "<b>System:</b><br/>You have joined <b>General</b> room");
     socket.broadcast
-      .to("global")
-      .emit("updateChat", "INFO", "<b>System:</b><br/>"+username + " has joined <b>global</b> room");
+      .to("General")
+      .emit("updateChat", "INFO", "<b>System:</b><br/>"+username + " has joined <b>General</b> room");
     io.sockets.emit("updateUsers", usernames);
-    socket.emit("updateRooms", rooms, "global");
+    socket.emit("updateRooms", rooms, "General");
   });
 
 
   socket.on("sendMessage", function(data) {
-    io.sockets
+    socket.broadcast
       .to(socket.currentRoom)
       .emit("updateChat", socket.username, data);
+
+      socket.emit("updateChat", socket.username, data);
+    // io.sockets
+    //   .to(socket.currentRoom)
+    //   .emit("updateChat", socket.username, data);
   });
 
 //file upload
